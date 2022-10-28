@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateTransactionRequest {
-    @NotBlank(message = "Base currency not to be null")
+    @NotNull(message = "Base currency not to be null")
     private String baseCurrency;
     @NotEmpty(message = "Target currencies not be null")
     private List<String> targetCurrencies;
