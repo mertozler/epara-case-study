@@ -1,7 +1,6 @@
 package com.epara.exchange.controller;
 
 import com.epara.exchange.IntegrationTestSupport;
-import com.epara.exchange.dto.CreateTransactionRequest;
 import com.epara.exchange.dto.TransactionDto;
 import com.epara.exchange.model.Transaction;
 import org.junit.jupiter.api.Test;
@@ -13,16 +12,16 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
@@ -51,6 +50,51 @@ class TransactionControllerTest extends IntegrationTestSupport  {
                 .andReturn();
 
     }
+
+    @Test
+    public void testfindTransactionByDateRange_whenTransactionsAreNotExists_ShouldReturnAnTransactionListIsEmptyException() throws Exception {
+        //given
+        String startDate = "15/10/2040";
+        String endDate = "10/10/2050";
+        //when
+        //then
+        this.mockMvc.perform(get(TRANSACTION_API_ENDPOINT)
+                        .queryParam("startDate", startDate)
+                        .queryParam("endDate",endDate))
+                .andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.errors", notNullValue()))
+                .andExpect(jsonPath("$.errors.details", is("TransactionListIsEmptyException")))
+                .andReturn();
+
+    }
+
+    @Test
+    public void testfindTransactionByDateRange_whenTransactionsAreExists_ShouldReturnTransactionDtoList() throws Exception {
+        //given
+        String startDate = "15/10/2020";
+        String endDate = "10/10/2030";
+
+        Transaction transaction = transactionRepository.save(generateTransaction());
+        Transaction transaction2 = transactionRepository.save(generateTransaction());
+        Transaction transaction3 = transactionRepository.save(generateTransaction());
+
+        transactionService.createTransaction(transaction);
+        transactionService.createTransaction(transaction2);
+        transactionService.createTransaction(transaction3);
+
+
+        //when
+        //then
+        this.mockMvc.perform(get(TRANSACTION_API_ENDPOINT)
+                        .queryParam("startDate", startDate)
+                        .queryParam("endDate",endDate))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.payload", notNullValue()))
+                .andReturn();
+
+    }
+
 
     @Test
     public void testGetTransactionGetById_whenTransactionIdISNotExists_ShouldReturnError() throws Exception {

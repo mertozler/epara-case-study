@@ -34,6 +34,7 @@ public class TestSupport {
         return new Transaction("test", LocalDate.now(),true, "base", rates);
     }
 
+
     public CreateTransactionRequest generateCreateTransactionRequest(String baseCurrency, List<String> targetCurrencies) {
         return new CreateTransactionRequest(baseCurrency, targetCurrencies);
     }

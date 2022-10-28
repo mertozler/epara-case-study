@@ -5,7 +5,6 @@ import com.epara.exchange.dto.converter.TransactionDtoConverter;
 import com.epara.exchange.exception.TransactionNotFoundException;
 import com.epara.exchange.model.Transaction;
 import com.epara.exchange.repository.TransactionRepository;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -16,7 +15,6 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.mockitoSession;
 
 
 public class TransactionServiceTest {
