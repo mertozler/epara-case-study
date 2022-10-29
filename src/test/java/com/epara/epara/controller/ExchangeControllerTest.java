@@ -69,8 +69,9 @@ class ExchangeControllerTest  extends IntegrationTestSupport {
                 .andExpect(status().is4xxClientError());
     }
 
+
     @Test
-    public void testCreateTransaction_WhenExchangeRequestIsFailed_shouldReturnTransactionIsFailedException() throws Exception {
+    public void testCreateTransaction_WhenExchangeRequestIsFailed_shouldReturnCurrencyCodeIsNotValidException() throws Exception {
         //given
         List<String> targetCurrencies = new ArrayList<>();
         targetCurrencies.add("TRY");
@@ -85,10 +86,10 @@ class ExchangeControllerTest  extends IntegrationTestSupport {
         this.mockMvc.perform(post(EXCHANGE_API_ENDPOINT)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writer().withDefaultPrettyPrinter().writeValueAsString(request)))
-                .andExpect(status().is5xxServerError())
+                .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.errors", notNullValue()))
-                .andExpect(jsonPath("$.errors.details", is("TransactionIsFailedException")));
+                .andExpect(jsonPath("$.errors.details", is("CurrencyCodeIsNotValidException")));
     }
 
 }

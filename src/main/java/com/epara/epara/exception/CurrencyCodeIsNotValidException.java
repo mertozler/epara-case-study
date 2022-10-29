@@ -4,8 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class TransactionIsFailedException extends RuntimeException{
-    public TransactionIsFailedException(String message){
+public class CurrencyCodeIsNotValidException extends RuntimeException{
+    public CurrencyCodeIsNotValidException(String message){
         super(message);
     }
 }

@@ -4,30 +4,35 @@ import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.List;
 
+import static com.epara.epara.utils.ExchangeUtils.validateCurrencyCode;
+
 @Component
-public class ExchangeProvider {
+public class ExchangeProvider implements IExchangeProvider {
 
     @Value("${exchangeProvider.apikey}")
-    String APIKEY;
-    @Value("${exchangeProvider.host}")
-    String HOST;
+    private String APIKEY;
+
 
     public ExchangeProvider() {
     }
 
+    @Override
     public String getExchangeRatesByBaseAndTargetCurrencies(String baseCurrency, List<String> targetCurrencies) throws IOException {
+        validateCurrencyCode(baseCurrency);
+
         OkHttpClient client = new OkHttpClient().newBuilder().build();
         var generatedSymbols = generateSymbols(targetCurrencies);
 
         HttpUrl httpUrl = new HttpUrl.Builder()
                 .scheme("https")
-                .host(HOST)
+                .host("api.apilayer.com")
                 .addPathSegment("fixer")
                 .addPathSegment("latest")
                 .addQueryParameter("symbols", generatedSymbols)
@@ -45,10 +50,11 @@ public class ExchangeProvider {
         return response.body().string();
     }
 
-    private String generateSymbols( List<String> targetCurrencies){
+    public String generateSymbols(List<String> targetCurrencies) {
         StringBuilder symbolsBuilder = new StringBuilder();
 
         for(int i=0; i<targetCurrencies.size();i++){
+            validateCurrencyCode(targetCurrencies.get(i));
             if(i==targetCurrencies.size()-1){
                 symbolsBuilder.append(targetCurrencies.get(i));
                 break;
@@ -57,4 +63,6 @@ public class ExchangeProvider {
         }
         return symbolsBuilder.toString();
     }
+
+
 }

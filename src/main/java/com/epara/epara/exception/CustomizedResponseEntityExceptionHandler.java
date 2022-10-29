@@ -11,12 +11,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 @RestController
 public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
-    @ExceptionHandler(TransactionIsFailedException.class)
-    public final ResponseEntity handleTransactionIsFailedException(Exception ex) {
-        Response response = Response.exception();
-        response.addErrorMsgToResponse("TransactionIsFailedException", ex);
-        return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+
     @ExceptionHandler(TransactionListIsEmptyException.class)
     public final ResponseEntity handleTransactionListIsEmptyException(Exception ex) {
         Response response = Response.notFound();
@@ -28,5 +23,12 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
         Response response = Response.notFound();
         response.addErrorMsgToResponse("TransactionNotFoundException", ex);
         return new ResponseEntity(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(CurrencyCodeIsNotValidException.class)
+    public final ResponseEntity handleCurrencyCodeIsNotValidException(Exception ex) {
+        Response response = Response.badRequest();
+        response.addErrorMsgToResponse("CurrencyCodeIsNotValidException", ex);
+        return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
     }
 }

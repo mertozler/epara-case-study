@@ -3,7 +3,6 @@ package com.epara.epara.controller;
 import com.epara.epara.dto.CreateTransactionRequest;
 import com.epara.epara.dto.TransactionDto;
 import com.epara.epara.dto.response.Response;
-import com.epara.epara.exception.TransactionIsFailedException;
 import com.epara.epara.model.Transaction;
 import com.epara.epara.provider.ExchangeProvider;
 import com.epara.epara.service.TransactionService;
@@ -46,12 +45,6 @@ public class ExchangeController {
         String responseJson = exchangeProvider.getExchangeRatesByBaseAndTargetCurrencies(request.getBaseCurrency(),
                 request.getTargetCurrencies());
         Transaction transaction = gson.fromJson(responseJson, Transaction.class);
-
-        if(!transaction.isSuccess()){
-            logger.error("Error while create transaction because transaction is not successful");
-            throw new TransactionIsFailedException("Transaction could not be performed, " +
-                    "please make sure you entered the currency information correctly.");
-        }
 
         TransactionDto createdTransaction = transactionService.createTransaction(transaction);
 

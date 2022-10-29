@@ -35,17 +35,20 @@ public class TransactionController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<TransactionDto>> getTransactionByDateRange(
+    public ResponseEntity getTransactionByDateRange(
             @RequestParam @DateTimeFormat(pattern="dd/MM/yyyy") LocalDate startDate,
             @RequestParam @DateTimeFormat(pattern="dd/MM/yyyy")  LocalDate endDate) {
         logger.info("Get transaction request received with date range, start date: {} and end date: {}",
                 startDate,
                 endDate);
+
         List<TransactionDto> transactionDtoList = transactionService.findTransactionByDateRange(startDate,endDate);
+
         if(transactionDtoList.isEmpty()){
             throw new TransactionListIsEmptyException("No transaction data can be found in this date range. " +
                     "Please check the date range you entered.");
         }
+
         return new ResponseEntity(Response.ok().setPayload(transactionDtoList), HttpStatus.OK);
     }
 }
