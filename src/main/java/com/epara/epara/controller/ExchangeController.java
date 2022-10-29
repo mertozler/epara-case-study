@@ -9,6 +9,7 @@ import com.epara.epara.provider.ExchangeProvider;
 import com.epara.epara.service.TransactionService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/v1/api/exchanges")
+@Api(value = "Exchange Api documentation")
 public class ExchangeController {
     private final TransactionService transactionService;
     private final ExchangeProvider exchangeProvider;
