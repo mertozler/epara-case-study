@@ -7,6 +7,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.Objects;
+
 @ControllerAdvice
 public class ValidationErrorHandler {
 
@@ -15,7 +17,7 @@ public class ValidationErrorHandler {
     public final ResponseEntity<Response> handleMethodArgumentNotValidException(
             MethodArgumentNotValidException ex) {
         Response response = Response.validationException();
-        response.addErrorMsgToResponse(ex.getFieldError().getDefaultMessage(), ex);
-        return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+        response.addErrorMsgToResponse(Objects.requireNonNull(ex.getFieldError()).getDefaultMessage(), ex);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }

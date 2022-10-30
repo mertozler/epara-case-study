@@ -37,7 +37,7 @@ public class ExchangeController {
     }
 
     @PostMapping
-    public ResponseEntity createTransaction(@Valid @RequestBody CreateTransactionRequest request) throws IOException {
+    public ResponseEntity<Response<Object>> createTransaction(@Valid @RequestBody CreateTransactionRequest request) throws IOException {
         logger.info("Create transaction request received for base currency: {} and target currencies: {}",
                 request.getBaseCurrency(),
                 request.getTargetCurrencies());
@@ -49,7 +49,7 @@ public class ExchangeController {
 
         TransactionDto createdTransaction = transactionService.createTransaction(transaction);
 
-        return new ResponseEntity(Response.created().setPayload(createdTransaction), HttpStatus.CREATED);
+        return new ResponseEntity<>(Response.created().setPayload(createdTransaction), HttpStatus.CREATED);
     }
 
 }

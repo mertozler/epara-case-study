@@ -26,14 +26,14 @@ public class TransactionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getTransactionById(@PathVariable String id) {
+    public ResponseEntity<Response<Object>> getTransactionById(@PathVariable String id) {
         logger.info("Get transaction request received for: {}", id);
         TransactionDto transactionDto = transactionService.findTransactionById(id);
-        return new ResponseEntity(Response.ok().setPayload(transactionDto), HttpStatus.OK);
+        return new ResponseEntity<>(Response.ok().setPayload(transactionDto), HttpStatus.OK);
     }
 
     @GetMapping("/")
-    public ResponseEntity getTransactionByDateRange(
+    public ResponseEntity<Response<Object>> getTransactionByDateRange(
             @RequestParam @DateTimeFormat(pattern="dd/MM/yyyy") LocalDate startDate,
             @RequestParam @DateTimeFormat(pattern="dd/MM/yyyy")  LocalDate endDate) {
         logger.info("Get transaction request received with date range, start date: {} and end date: {}",
@@ -47,6 +47,6 @@ public class TransactionController {
                     "Please check the date range you entered.");
         }
 
-        return new ResponseEntity(Response.ok().setPayload(transactionDtoList), HttpStatus.OK);
+        return new ResponseEntity<>(Response.ok().setPayload(transactionDtoList), HttpStatus.OK);
     }
 }
