@@ -38,8 +38,7 @@ public class FixerExchangeProvider implements IExchangeProvider {
 
      private Response sendRequest(Request request) throws IOException {
         OkHttpClient client = new OkHttpClient().newBuilder().build();
-        Response response = client.newCall(request).execute();
-        return response;
+        return client.newCall(request).execute();
     }
 
 

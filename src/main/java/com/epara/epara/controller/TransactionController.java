@@ -3,7 +3,6 @@ package com.epara.epara.controller;
 import com.epara.epara.dto.TransactionDto;
 import com.epara.epara.dto.response.Response;
 import com.epara.epara.exception.TransactionListIsEmptyException;
-import com.epara.epara.provider.FixerExchangeProvider;
 import com.epara.epara.service.TransactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,12 +18,11 @@ import java.util.List;
 @RequestMapping("/v1/api/transactions")
 public class TransactionController {
     private final TransactionService transactionService;
-    private final FixerExchangeProvider fixerExchangeProvider;
+
     Logger logger = LoggerFactory.getLogger(TransactionController.class);
 
-    public TransactionController(TransactionService transactionService, FixerExchangeProvider fixerExchangeProvider) {
+    public TransactionController(TransactionService transactionService) {
         this.transactionService = transactionService;
-        this.fixerExchangeProvider = fixerExchangeProvider;
     }
 
     @GetMapping("/{id}")
