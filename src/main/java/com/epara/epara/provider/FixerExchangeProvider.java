@@ -43,5 +43,4 @@ public class FixerExchangeProvider implements IExchangeProvider {
     }
 
 
-
 }

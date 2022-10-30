@@ -122,5 +122,25 @@ public class TransactionServiceTest {
         assertEquals(result, transactionDtoList);
     }
 
+    @Test
+    public void findTransactionByDateRange_WhenThereIsNoTransactionData_ShouldReturnEmptyList(){
+        //given
+        LocalDate startDate =  LocalDate.of(2022, 10, 8);
+        LocalDate endDate = LocalDate.now();
+
+        List<Transaction> transactionList = new ArrayList<>();
+
+        List<TransactionDto> transactionDtoList = new ArrayList<>();
+
+        Mockito.when(transactionRepository.findByCreationDateBetween(startDate,endDate)).thenReturn(transactionList);
+        Mockito.when(converter.convertList(transactionList)).thenReturn(transactionDtoList);
+        //when
+
+        List<TransactionDto> result = service.findTransactionByDateRange(startDate,endDate);
+
+        //then
+        assertEquals(result.size(), 0);
+    }
+
 
 }
