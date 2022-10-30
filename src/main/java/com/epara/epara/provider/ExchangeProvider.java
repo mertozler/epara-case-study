@@ -1,10 +1,10 @@
 package com.epara.epara.provider;
 
+
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -13,8 +13,10 @@ import java.util.List;
 
 import static com.epara.epara.utils.ExchangeUtils.validateCurrencyCode;
 
+
 @Component
 public class ExchangeProvider implements IExchangeProvider {
+
 
     @Value("${exchangeProvider.apikey}")
     private String APIKEY;
@@ -27,9 +29,32 @@ public class ExchangeProvider implements IExchangeProvider {
     public String getExchangeRatesByBaseAndTargetCurrencies(String baseCurrency, List<String> targetCurrencies) throws IOException {
         validateCurrencyCode(baseCurrency);
 
-        OkHttpClient client = new OkHttpClient().newBuilder().build();
         var generatedSymbols = generateSymbols(targetCurrencies);
 
+        Request generatedRequest = generateRequest(baseCurrency, generatedSymbols);
+
+        Response response = sendRequest(generatedRequest);
+
+        return response.body().string();
+    }
+
+    private Response sendRequest(Request request) throws IOException {
+        OkHttpClient client = new OkHttpClient().newBuilder().build();
+        Response response = client.newCall(request).execute();
+        return response;
+    }
+
+    private Request generateRequest(String baseCurrency, String generatedSymbols){
+        HttpUrl generatedUrl = generateUrl(baseCurrency, generatedSymbols);
+        Request request = new Request.Builder()
+                .url(generatedUrl)
+                .addHeader("apikey", APIKEY)
+                .method("GET", null)
+                .build();
+        return request;
+    }
+
+    private HttpUrl generateUrl(String baseCurrency, String generatedSymbols){
         HttpUrl httpUrl = new HttpUrl.Builder()
                 .scheme("https")
                 .host("api.apilayer.com")
@@ -38,19 +63,10 @@ public class ExchangeProvider implements IExchangeProvider {
                 .addQueryParameter("symbols", generatedSymbols)
                 .addQueryParameter("base", baseCurrency)
                 .build();
-
-        Request request = new Request.Builder()
-                .url(httpUrl)
-                .addHeader("apikey", APIKEY)
-                .method("GET", null)
-            .build();
-
-        Response response = client.newCall(request).execute();
-
-        return response.body().string();
+        return httpUrl;
     }
 
-    public String generateSymbols(List<String> targetCurrencies) {
+    private String generateSymbols(List<String> targetCurrencies) {
         StringBuilder symbolsBuilder = new StringBuilder();
 
         for(int i=0; i<targetCurrencies.size();i++){
@@ -63,6 +79,5 @@ public class ExchangeProvider implements IExchangeProvider {
         }
         return symbolsBuilder.toString();
     }
-
 
 }
