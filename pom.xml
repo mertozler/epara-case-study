@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.epara</groupId>
-	<artifactId>exchangeProvider</artifactId>
+	<artifactId>fixerExchangeProvider</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>exchange</name>
 	<description>E-Para Case Study</description>

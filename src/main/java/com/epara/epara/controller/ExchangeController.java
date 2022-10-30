@@ -4,7 +4,7 @@ import com.epara.epara.dto.CreateTransactionRequest;
 import com.epara.epara.dto.TransactionDto;
 import com.epara.epara.dto.response.Response;
 import com.epara.epara.model.Transaction;
-import com.epara.epara.provider.ExchangeProvider;
+import com.epara.epara.provider.FixerExchangeProvider;
 import com.epara.epara.service.TransactionService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -26,13 +26,13 @@ import java.io.IOException;
 @Api(value = "Exchange Api documentation")
 public class ExchangeController {
     private final TransactionService transactionService;
-    private final ExchangeProvider exchangeProvider;
+    private final FixerExchangeProvider fixerExchangeProvider;
     private final Gson gson;
     Logger logger = LoggerFactory.getLogger(ExchangeController.class);
 
-    public ExchangeController(TransactionService transactionService, ExchangeProvider exchangeProvider) {
+    public ExchangeController(TransactionService transactionService, FixerExchangeProvider fixerExchangeProvider) {
         this.transactionService = transactionService;
-        this.exchangeProvider = exchangeProvider;
+        this.fixerExchangeProvider = fixerExchangeProvider;
         this.gson = new GsonBuilder().create();
     }
 
@@ -42,8 +42,9 @@ public class ExchangeController {
                 request.getBaseCurrency(),
                 request.getTargetCurrencies());
 
-        String responseJson = exchangeProvider.getExchangeRatesByBaseAndTargetCurrencies(request.getBaseCurrency(),
+        String responseJson = fixerExchangeProvider.getExchangeRatesByBaseAndTargetCurrencies(request.getBaseCurrency(),
                 request.getTargetCurrencies());
+
         Transaction transaction = gson.fromJson(responseJson, Transaction.class);
 
         TransactionDto createdTransaction = transactionService.createTransaction(transaction);
