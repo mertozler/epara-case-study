@@ -17,6 +17,7 @@ Bu proje 2 farklı API ile kullanıcının girdiği base ve target currencies da
 * /v1/api/exchanges'e POST işlemi yaptığımızda base ve target currencies ile provider'dan dataları alıp, H2 veritabanına kaydediyoruz. Olası bir error durumunda response olarak bunu dönüyoruz.
 * /v1/api/transactions/{id} endpointinde transactionId ile sorgulama yapabiliyoruz. Eğer ki o ID ile yer alan bir transaction varsa kullanıcıya bu datayı gösteriyor, yoksa hata veriyor.
 * /v1/api/transactions endpointinde queryParam olarak startDate ve endDate alıyoruz. Bu tarih parametleri "dd/MM/yyyy" formatında olmasına özen gösterdim. Eğer ki bu tarih aralığında belirli transactionlar gerçekleşmişse kullanıcıya liste olarak döndürüyorum. Eğer liste boş ise TransactionListIsEmptyException fırlatıyorum. 
+* Projede dockerize pipeline'ını simüle edebilmek için Dockerfile ekledim. Olası CI/CD ortamında bu dosya sayesinde hızlıca yeni geliştirmeler dockerize edilebilir.
 
 ### Tech Stack
 ---
