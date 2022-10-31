@@ -18,6 +18,17 @@ Bu proje 2 farklı API ile kullanıcının girdiği base ve target currencies da
 * /v1/api/transactions/{id} endpointinde transactionId ile sorgulama yapabiliyoruz. Eğer ki o ID ile yer alan bir transaction varsa kullanıcıya bu datayı gösteriyor, yoksa hata veriyor.
 * /v1/api/transactions endpointinde queryParam olarak startDate ve endDate alıyoruz. Bu tarih parametleri "dd/MM/yyyy" formatında olmasına özen gösterdim. Eğer ki bu tarih aralığında belirli transactionlar gerçekleşmişse kullanıcıya liste olarak döndürüyorum. Eğer liste boş ise TransactionListIsEmptyException fırlatıyorum. 
 
+### Tech Stack
+---
+- Java 11
+- Spring Boot
+- Spring Data JPA
+- Restful API
+- OpenAPI documentation
+- H2 In memory database  
+- Docker
+- JUnit 5
+
 ## Kullanım
 
 Projeyi indirdikten sonra application.properties içerisinde yer alan APIKEY datasını giriniz. Aksi halde Fixer Provider API istek atamayacaktır.
