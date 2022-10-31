@@ -12,6 +12,8 @@ import org.mockito.Mockito;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -24,6 +26,7 @@ public class TransactionServiceTest {
     private TransactionService service;
     private TransactionRepository transactionRepository;
     private TransactionDtoConverter converter;
+
 
     @BeforeEach
     public void setUp(){
@@ -115,13 +118,12 @@ public class TransactionServiceTest {
         transactionDtoList.add(transactionDto);
 
         when(transactionRepository.findByCreationDateBetween(startDate,endDate)).thenReturn(transactionList);
-        when(converter.convertList(transactionList)).thenReturn(transactionDtoList);
         //when
 
         List<TransactionDto> result = service.findTransactionByDateRange(startDate,endDate);
 
         //then
-        assertEquals(result, transactionDtoList);
+        assertEquals(result.size(), transactionDtoList.size());
     }
 
     @Test

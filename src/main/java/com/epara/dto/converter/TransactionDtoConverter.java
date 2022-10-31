@@ -17,14 +17,4 @@ public class TransactionDtoConverter {
                 rates(from.getRates()).build();
     }
 
-    public List<TransactionDto> convertList(List<Transaction> from){
-        List<TransactionDto> transactionDtoList = new ArrayList<>();
-        for(var transaction: from){
-            transactionDtoList.add(TransactionDto.builder()
-                    .id(transaction.getId()).
-                    base(transaction.getBase()).
-                    rates(transaction.getRates()).build());
-        }
-        return transactionDtoList;
-    }
 }

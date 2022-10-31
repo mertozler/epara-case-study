@@ -31,14 +31,17 @@ public class TransactionService {
     }
 
     public  List<TransactionDto> findTransactionByDateRange(LocalDate startDate, LocalDate endDate){
-        List<TransactionDto> transactionDtoList = converter.
-                convertList(transactionRepository.findByCreationDateBetween(startDate,endDate));
+        List<Transaction> transactionList = transactionRepository.findByCreationDateBetween(startDate,endDate);
+
+        List<TransactionDto> transactionDtoList= transactionList.stream()
+                .map(converter::convert)
+                .collect(Collectors.toList());
 
         if(transactionDtoList.isEmpty()){
             throw new TransactionListIsEmptyException("No transaction data can be found in this date range. " +
                     "Please check the date range you entered.");
         }
-        return converter.convertList(transactionRepository.findByCreationDateBetween(startDate,endDate));
+        return transactionDtoList;
     }
 
     public TransactionDto createTransaction(Transaction newTransaction){
